@@ -832,6 +832,9 @@
 //@ revisions: riscv64gc_unknown_nuttx_elf
 //@ [riscv64gc_unknown_nuttx_elf] compile-flags: --target riscv64gc-unknown-nuttx-elf
 //@ [riscv64gc_unknown_nuttx_elf] needs-llvm-components: riscv
+//@ revisions: rx_none_elf
+//@ [rx_none_elf] compile-flags: --target rx-none-elf
+//@ [rx_none_elf] needs-llvm-components: rx
 //@ revisions: xtensa_esp32_none_elf
 //@ [xtensa_esp32_none_elf] compile-flags: --target xtensa-esp32-none-elf
 //@ [xtensa_esp32_none_elf] needs-llvm-components: xtensa

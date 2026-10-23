@@ -1540,6 +1540,8 @@ supported_targets! {
 
     ("msp430-none-elf", msp430_none_elf),
 
+    ("rx-none-elf", rx_none_elf),
+
     ("aarch64_be-unknown-hermit", aarch64_be_unknown_hermit),
     ("aarch64-unknown-hermit", aarch64_unknown_hermit),
     ("riscv64gc-unknown-hermit", riscv64gc_unknown_hermit),
@@ -1782,6 +1784,7 @@ crate::target_spec_enum! {
         PowerPC64 = "powerpc64",
         RiscV32 = "riscv32",
         RiscV64 = "riscv64",
+        Rx = "rx",
         S390x = "s390x",
         Sparc = "sparc",
         Sparc64 = "sparc64",
@@ -1819,6 +1822,7 @@ impl Arch {
             Self::PowerPC64 => sym::powerpc64,
             Self::RiscV32 => sym::riscv32,
             Self::RiscV64 => sym::riscv64,
+            Self::Rx => sym::rx,
             Self::S390x => sym::s390x,
             Self::Sparc => sym::sparc,
             Self::Sparc64 => sym::sparc64,
@@ -1840,7 +1844,7 @@ impl Arch {
             AArch64 | RiscV32 | RiscV64 => true,
             AmdGpu | Arm | Arm64EC | Avr | Bpf | CSky | Hexagon | LoongArch32 | LoongArch64
             | M68k | Mips | Mips32r6 | Mips64 | Mips64r6 | Msp430 | Nvptx64 | PowerPC
-            | PowerPC64 | S390x | Sparc | Sparc64 | SpirV | Wasm32 | Wasm64 | X86 | X86_64
+            | PowerPC64 | Rx | S390x | Sparc | Sparc64 | SpirV | Wasm32 | Wasm64 | X86 | X86_64
             | Xtensa | Other(_) => false,
         }
     }
@@ -2124,7 +2128,7 @@ impl Target {
             // - Check that calling c-variadic functions defined in Rust can be called from C.
             // For most targets `tests/run-make/c-link-to-rust-va-list-fn` can be used here.
             // For no_std targets a manual setup may be needed.
-            Sparc | Avr | M68k | Msp430 => {
+            Sparc | Avr | M68k | Msp430 | Rx => {
                 CVariadicStatus::Unstable { feature: sym::c_variadic_experimental_arch }
             }
 
@@ -3091,6 +3095,7 @@ impl Target {
             Arch::Arm64EC => (Architecture::Aarch64, Some(object::SubArchitecture::Arm64EC)),
             Arch::AmdGpu
             | Arch::Nvptx64
+            | Arch::Rx
             | Arch::SpirV
             | Arch::Wasm32
             | Arch::Wasm64

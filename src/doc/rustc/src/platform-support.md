@@ -426,6 +426,7 @@ target | std | host | notes
 [`riscv64gc-unknown-redox`](platform-support/redox.md) | ✓ |  | RISC-V 64bit Redox OS
 [`riscv64im-unknown-none-elf`](platform-support/riscv64im-unknown-none-elf.md) | * |  | Bare RISC-V (RV64IM ISA)
 [`riscv64imac-unknown-nuttx-elf`](platform-support/nuttx.md) | ✓ |  | RISC-V 64bit with NuttX
+[`rx-none-elf`](platform-support/rx-none-elf.md) | * |  | Bare Renesas RX (RXv1-RXv3e)
 [`s390x-unknown-linux-musl`](platform-support/s390x-unknown-linux-musl.md) | ✓ |  | S390x Linux (kernel 3.2, musl 1.2.5)
 `sparc-unknown-linux-gnu` | ✓ |  | 32-bit SPARC Linux
 [`sparc-unknown-none-elf`](./platform-support/sparc-unknown-none-elf.md) | * |  | Bare 32-bit SPARC V7+

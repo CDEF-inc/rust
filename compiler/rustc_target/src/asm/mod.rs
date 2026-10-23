@@ -281,7 +281,7 @@ impl InlineAsmArch {
             Arch::M68k => Some(Self::M68k),
             Arch::CSky => Some(Self::CSKY),
             Arch::Xtensa => Some(Self::Xtensa),
-            Arch::Other(_) => None,
+            Arch::Rx | Arch::Other(_) => None,
         }
     }
 }

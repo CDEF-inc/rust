@@ -124,6 +124,7 @@
     - [riscv64gc-unknown-linux-gnu](platform-support/riscv64gc-unknown-linux-gnu.md)
     - [riscv64gc-unknown-linux-musl](platform-support/riscv64gc-unknown-linux-musl.md)
     - [riscv64a23-unknown-linux-gnu](platform-support/riscv64a23-unknown-linux-gnu.md)
+    - [rx-none-elf](platform-support/rx-none-elf.md)
     - [s390x-unknown-linux-gnu](platform-support/s390x-unknown-linux-gnu.md)
     - [s390x-unknown-linux-musl](platform-support/s390x-unknown-linux-musl.md)
     - [s390x-unknown-none-softfloat](platform-support/s390x-unknown-none-softfloat.md)

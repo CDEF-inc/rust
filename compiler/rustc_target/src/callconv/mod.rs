@@ -26,6 +26,7 @@ mod nvptx64;
 mod powerpc;
 mod powerpc64;
 mod riscv;
+mod rx;
 mod s390x;
 mod sparc;
 mod sparc64;
@@ -761,6 +762,7 @@ impl<'a, Ty> FnAbi<'a, Ty> {
             Arch::PowerPC64 => powerpc64::compute_abi_info(cx, self),
             Arch::S390x => s390x::compute_abi_info(cx, self),
             Arch::Msp430 => msp430::compute_abi_info(cx, self),
+            Arch::Rx => rx::compute_abi_info(cx, self),
             Arch::Sparc => sparc::compute_abi_info(cx, self),
             Arch::Sparc64 => sparc64::compute_abi_info(cx, self),
             Arch::Nvptx64 => {
