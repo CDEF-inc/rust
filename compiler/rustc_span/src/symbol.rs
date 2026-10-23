@@ -1914,6 +1914,7 @@ symbols! {
         rvalue_static_promotion,
         rvector,
         rwpi,
+        rx,
         s32c1i,
         s390x,
         s390x_target_feature,
