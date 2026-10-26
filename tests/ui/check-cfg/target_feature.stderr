@@ -77,6 +77,7 @@ LL |     cfg!(target_feature = "_UNEXPECTED_VALUE");
 `d32`
 `debug`
 `deflate-conversion`
+`dfpu`
 `dit`
 `div32`
 `doloop`
@@ -127,6 +128,7 @@ LL |     cfg!(target_feature = "_UNEXPECTED_VALUE");
 `fp8dot4`
 `fp8fma`
 `fpregs`
+`fpu`
 `fpuv2_df`
 `fpuv2_sf`
 `fpuv3_df`
@@ -284,6 +286,9 @@ LL |     cfg!(target_feature = "_UNEXPECTED_VALUE");
 `rtm`
 `rva23u64`
 `rvector`
+`rxv2`
+`rxv3`
+`rxv3e`
 `s32c1i`
 `sb`
 `scq`
