@@ -29,9 +29,10 @@ pub(crate) fn target() -> Target {
             linker_flavor: LinkerFlavor::Gnu(Cc::No, Lld::No),
 
             // Aligned loads and stores of up to 32 bits are atomic (all parts
-            // are single-core), but there is no compare-and-swap.
+            // are single-core). Compare-and-swap is a MOVLI/MOVCO loop on
+            // RXv2 and later, and runs with interrupts masked on RXv1.
             max_atomic_width: Some(32),
-            atomic_cas: false,
+            atomic_cas: true,
 
             // No unwinder; GNU as for rx-elf does not accept CFI directives.
             panic_strategy: PanicStrategy::Abort,

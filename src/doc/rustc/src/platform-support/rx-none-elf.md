@@ -39,10 +39,13 @@ Floating point uses soft-float routines (GCC enables `-ffinite-math-only`
 whenever it uses the RX FPU, which does not give IEEE semantics).
 
 The default CPU is `rxv3`; pass `-C target-cpu=rxv1` or `rxv2` for older
-cores. Code generation currently uses RXv1 instructions only.
+cores. Code generation currently uses RXv1 instructions, except for atomics.
 
-The target has no compare-and-swap: `max_atomic_width` is 32, and only atomic
-loads and stores are available. Panics abort; there is no unwinding.
+Atomics are available up to 32 bits (`max_atomic_width`), including
+compare-and-swap and read-modify-write operations. On RXv2 and later they are
+a `movli`/`movco` loop; on RXv1, which has no such instructions, the
+compare-and-swap runs with interrupts masked (`clrpsw i`), which is atomic
+only in supervisor mode. Panics abort; there is no unwinding.
 
 ## Building the target
 
