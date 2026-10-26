@@ -35,19 +35,11 @@ and be called by C compiled with GCC or Renesas GNURX:
   R1-R4, others through a pointer in R15;
 * R6-R13 are callee-saved, R0 is the stack pointer.
 
-Floating point uses soft-float routines: the RX FPU does not handle NaNs,
-infinities or denormals the IEEE way (GCC enables `-ffinite-math-only`
-whenever it uses it). With the LLVM `fpu` feature, which the `rxv2`, `rxv3`
-and `rxv3e` CPUs enable, `f32` operations that LLVM may assume free of NaNs
-and infinities (fast-math, e.g. `core::intrinsics::fadd_fast`) in functions
-that allow denormals to be flushed (LLVM's `denormal_fpenv(preservesign)`,
-which rustc never sets, so in Rust code this does not happen) and integer to
-`f32` conversions use the FPU; everything else stays soft-float. Values are
-passed in general registers either way. rustc does not know the RX target
-features, so `-C target-feature=-fpu` is accepted with a warning.
+Floating point uses soft-float routines (GCC enables `-ffinite-math-only`
+whenever it uses the RX FPU, which does not give IEEE semantics).
 
 The default CPU is `rxv3`; pass `-C target-cpu=rxv1` or `rxv2` for older
-cores.
+cores. Code generation currently uses RXv1 instructions, except for atomics.
 
 Atomics are available up to 32 bits (`max_atomic_width`), including
 compare-and-swap and read-modify-write operations. On RXv2 and later they are
