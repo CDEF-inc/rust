@@ -1024,6 +1024,16 @@ static AVR_FEATURES: &[(&str, Stability, ImpliedFeatures)] = &[
     // tidy-alphabetical-end
 ];
 
+static RX_FEATURES: &[(&str, Stability, ImpliedFeatures)] = &[
+    // tidy-alphabetical-start
+    ("dfpu", Unstable(sym::rx_target_feature), &[]),
+    ("fpu", Unstable(sym::rx_target_feature), &[]),
+    ("rxv2", Unstable(sym::rx_target_feature), &[]),
+    ("rxv3", Unstable(sym::rx_target_feature), &["rxv2"]),
+    ("rxv3e", Unstable(sym::rx_target_feature), &["rxv3"]),
+    // tidy-alphabetical-end
+];
+
 const XTENSA_FEATURES: &[(&str, Stability, ImpliedFeatures)] = &[
     ("bool", Unstable(sym::xtensa_target_feature), &[]),
     ("fp", Unstable(sym::xtensa_target_feature), &["bool", "coprocessor"]),
@@ -1080,6 +1090,7 @@ pub fn all_rust_features() -> impl Iterator<Item = (&'static str, Stability)> {
         .chain(SPARC_FEATURES)
         .chain(M68K_FEATURES)
         .chain(AVR_FEATURES)
+        .chain(RX_FEATURES)
         .cloned()
         .map(|(f, s, _)| (f, s))
 }
@@ -1112,6 +1123,7 @@ pub fn feature_to_arch_names(feature: &str) -> Vec<&'static str> {
     check_arch_feats!("sparc", SPARC_FEATURES);
     check_arch_feats!("m68k", M68K_FEATURES);
     check_arch_feats!("avr", AVR_FEATURES);
+    check_arch_feats!("rx", RX_FEATURES);
     arches.sort();
     arches.dedup();
     arches
@@ -1195,7 +1207,8 @@ impl Target {
             Arch::M68k => M68K_FEATURES,
             Arch::Avr => AVR_FEATURES,
             Arch::Xtensa => XTENSA_FEATURES,
-            Arch::AmdGpu | Arch::Msp430 | Arch::Rx | Arch::SpirV | Arch::Other(_) => &[],
+            Arch::Rx => RX_FEATURES,
+            Arch::AmdGpu | Arch::Msp430 | Arch::SpirV | Arch::Other(_) => &[],
         }
     }
 

@@ -43,8 +43,12 @@ and infinities (fast-math, e.g. `core::intrinsics::fadd_fast`) and integer to
 `f32` conversions use the FPU; everything else stays soft-float. Likewise,
 with the `dfpu` feature (`rxv3`, `rxv3e`), fast-math `f64` arithmetic and
 comparisons and integer to `f64` conversions use the double-precision FPU
-(through DR0 / DR1). Values are passed in general registers either way. rustc does not know the RX target
-features, so `-C target-feature=-fpu` is accepted with a warning.
+(through DR0 / DR1). Values are passed in general registers either way.
+
+The RX target features `rxv2`, `rxv3`, `rxv3e`, `fpu` and `dfpu` are
+unstable (`rx_target_feature`); the CPUs enable them as LLVM does, and they
+can be tested with `cfg(target_feature = "...")` (the `rx-rt` runtime uses
+them to decide what an interrupt entry saves).
 
 The default CPU is `rxv3`; pass `-C target-cpu=rxv1` or `rxv2` for older
 cores.
