@@ -40,8 +40,10 @@ infinities or denormals the IEEE way (GCC enables `-ffinite-math-only`
 whenever it uses it). With the LLVM `fpu` feature, which the `rxv2`, `rxv3`
 and `rxv3e` CPUs enable, `f32` operations that LLVM may assume free of NaNs
 and infinities (fast-math, e.g. `core::intrinsics::fadd_fast`) and integer to
-`f32` conversions use the FPU; everything else stays soft-float. Values are
-passed in general registers either way. rustc does not know the RX target
+`f32` conversions use the FPU; everything else stays soft-float. Likewise,
+with the `dfpu` feature (`rxv3`, `rxv3e`), fast-math `f64` arithmetic and
+comparisons and integer to `f64` conversions use the double-precision FPU
+(through DR0 / DR1). Values are passed in general registers either way. rustc does not know the RX target
 features, so `-C target-feature=-fpu` is accepted with a warning.
 
 The default CPU is `rxv3`; pass `-C target-cpu=rxv1` or `rxv2` for older
