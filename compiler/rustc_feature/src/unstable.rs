@@ -720,6 +720,8 @@ declare_features! (
     (unstable, rust_preserve_none_cc, "1.95.0", Some(151401)),
     /// Allows `extern "tail"`.
     (unstable, rust_tail_cc, "1.98.0", Some(157427)),
+    /// Target features on Renesas RX.
+    (unstable, rx_target_feature, "CURRENT_RUSTC_VERSION", None),
     /// Target features on s390x.
     (unstable, s390x_target_feature, "1.82.0", Some(150259)),
     /// Allows the use of the `sanitize` attribute.
