@@ -1,5 +1,30 @@
 # Agent instructions
 
+## CDEF-inc fork
+
+This checkout is CDEF-inc/rust, the fork that adds the `rx-none-elf` target
+for the rx-rust toolchain (CDEF-inc/rx-rust). It has a single developer,
+YOKOTA Takahisa, who reviews and merges every pull request, and its changes
+are not sent to rust-lang. For work in this fork the following replaces the
+upstream gates in the next section:
+
+- **Reviewer**: the repository owner reviews every change; no other reviewer
+  needs to be named.
+- **Text**: agents may write code, source comments, diagnostics,
+  documentation, commit messages, pull request descriptions and review
+  replies. Pull request descriptions say that an LLM was used.
+- **Soundness**: codegen and other soundness-sensitive changes are allowed;
+  they still need tests that show the change.
+- **Before pushing**: no separate confirmation is needed; the owner reviews
+  the pull request. Changes land through pull requests, never by pushing to
+  `rx-none-elf` directly.
+- **Commits**: `Co-Authored-By` trailers for the LLM are allowed.
+
+Still required: tests for every change, and `./x test ... --bless` (never a
+hand edit) to update `.stderr` and other snapshots. Changes made under these
+rules cannot be contributed to rust-lang without meeting the upstream policy
+below.
+
 ## LLM usage policy
 
 Follow the Rust project's [LLM usage policy]. It applies to all LLM-generated
