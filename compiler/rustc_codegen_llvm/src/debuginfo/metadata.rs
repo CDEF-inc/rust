@@ -948,7 +948,14 @@ pub(crate) fn build_compile_unit_di_node<'ll, 'tcx>(
     debug!("build_compile_unit_di_node: {:?}", name_in_debuginfo);
     let rustc_producer = format!("rustc version {}", tcx.sess.cfg_version);
     // FIXME(#41252) Remove "clang LLVM" if we can get GDB and LLVM to play nice.
-    let producer = format!("clang LLVM ({rustc_producer})");
+    // The RX gdb that Renesas ships (e2 studio) drops the .debug_frame of any
+    // ELF with a producer starting with "clang" or "LLVM". Upstream gdb only
+    // looks for "clang " in its x86 prologue analysis.
+    let producer = if tcx.sess.target.arch == Arch::Rx {
+        format!("{rustc_producer} (LLVM)")
+    } else {
+        format!("clang LLVM ({rustc_producer})")
+    };
 
     let name_in_debuginfo = name_in_debuginfo.to_string_lossy();
     let work_dir = tcx.sess.psess.source_map().working_dir();
