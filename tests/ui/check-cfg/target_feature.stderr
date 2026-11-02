@@ -117,6 +117,7 @@ LL |     cfg!(target_feature = "_UNEXPECTED_VALUE");
 `float3e4`
 `float7e60`
 `floate1`
+`flush-denormals`
 `fma`
 `fma4`
 `fp`
