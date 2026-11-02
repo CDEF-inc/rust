@@ -1030,6 +1030,9 @@ static AVR_FEATURES: &[(&str, Stability, ImpliedFeatures)] = &[
 static RX_FEATURES: &[(&str, Stability, ImpliedFeatures)] = &[
     // tidy-alphabetical-start
     ("dfpu", Unstable(sym::rx_target_feature), &[]),
+    // Denormals may be flushed to zero, as the FPU / DFPU do (FPSW.DN = 1):
+    // float and double arithmetic, compares and conversions then use them.
+    ("flush-denormals", Unstable(sym::rx_target_feature), &[]),
     ("fpu", Unstable(sym::rx_target_feature), &[]),
     ("rxv2", Unstable(sym::rx_target_feature), &[]),
     ("rxv3", Unstable(sym::rx_target_feature), &["rxv2"]),
