@@ -18,9 +18,12 @@ The RX backend is not part of upstream LLVM. Building this target needs an
 LLVM with the experimental RX backend enabled
 (`-DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=RX`).
 
-LLD has no RX support, so linking uses GNU ld from binutils for `rx-elf`
-(`rx-elf-ld`), which rustc calls directly. Runtime routines that libgcc would
-otherwise provide come from `compiler_builtins`.
+The linker is `rust-lld`, which rustc calls directly. Upstream LLD has no RX
+support either: it needs the RX port of the same LLVM fork, built with
+`-DLLVM_ENABLE_PROJECTS=lld` and installed as `rust-lld` in the sysroot's
+`lib/rustlib/<host>/bin`. It links as GNU ld from binutils for `rx-elf` does,
+which `-C linker=rx-elf-ld` selects instead. Runtime routines that libgcc
+would otherwise provide come from `compiler_builtins`.
 
 The ABI follows GCC for `rx-elf` with `-m64bit-doubles`, so Rust code can call
 and be called by C compiled with GCC or Renesas GNURX:

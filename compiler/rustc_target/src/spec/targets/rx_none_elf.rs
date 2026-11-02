@@ -23,10 +23,12 @@ pub(crate) fn target() -> Target {
             // the ELF header, which GNU ld checks).
             features: "+64bit-doubles".into(),
 
-            // There is no RX support in LLD, and no libc: call GNU ld directly.
-            // compiler_builtins provides the runtime routines libgcc would.
-            linker: Some("rx-elf-ld".into()),
-            linker_flavor: LinkerFlavor::Gnu(Cc::No, Lld::No),
+            // No libc: call the linker directly. LLD (with the RX port of the
+            // LLVM fork) links as GNU ld does; `-C linker=rx-elf-ld` picks GNU
+            // ld instead. compiler_builtins provides the runtime routines
+            // libgcc would.
+            linker: Some("rust-lld".into()),
+            linker_flavor: LinkerFlavor::Gnu(Cc::No, Lld::Yes),
 
             // Aligned loads and stores of up to 32 bits are atomic (all parts
             // are single-core). Compare-and-swap is a MOVLI/MOVCO loop on
