@@ -38,11 +38,19 @@ and be called by C compiled with GCC or Renesas GNURX:
   R1-R4, others through a pointer in R15;
 * R6-R13 are callee-saved, R0 is the stack pointer.
 
-Floating point uses soft-float routines (GCC enables `-ffinite-math-only`
-whenever it uses the RX FPU, which does not give IEEE semantics).
+Floating point uses soft-float routines (`compiler_builtins`, fully IEEE)
+by default. With `-C target-feature=+flush-denormals` (unstable
+`rx_target_feature`), `f32` arithmetic, compares and `as` conversions use
+the FPU, and on `rxv3` / `rxv3e` `f64` uses the double-precision FPU (DFPU).
+The results are IEEE for NaNs, infinities, signed zeros and rounding; only
+denormal inputs and results become zero (FPSW.DN / DPSW.DDN, which the
+startup code sets). The FPU is about 28 times faster than soft-float on an
+RX72M. GCC, by contrast, uses the FPU only with `-ffinite-math-only`.
 
 The default CPU is `rxv3`; pass `-C target-cpu=rxv1` or `rxv2` for older
-cores. Code generation currently uses RXv1 instructions, except for atomics.
+cores. Code generation uses the instructions of the selected core: the RXv2
+3-operand and FPU forms, `emul` / `emulu`, `movli` / `movco` for atomics,
+and the DFPU on RXv3.
 
 Atomics are available up to 32 bits (`max_atomic_width`), including
 compare-and-swap and read-modify-write operations. On RXv2 and later they are
