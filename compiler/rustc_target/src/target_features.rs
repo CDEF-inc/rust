@@ -1031,6 +1031,9 @@ static RX_FEATURES: &[(&str, Stability, ImpliedFeatures)] = &[
     // float and double arithmetic, compares and conversions then use them.
     ("flush-denormals", Unstable(sym::rx_target_feature), &[]),
     ("fpu", Unstable(sym::rx_target_feature), &[]),
+    // Linker relaxation hints (as GNU as -relax): lld shortens calls and
+    // symbol addresses.
+    ("relax", Unstable(sym::rx_target_feature), &[]),
     ("rxv2", Unstable(sym::rx_target_feature), &[]),
     ("rxv3", Unstable(sym::rx_target_feature), &["rxv2"]),
     ("rxv3e", Unstable(sym::rx_target_feature), &["rxv3"]),
