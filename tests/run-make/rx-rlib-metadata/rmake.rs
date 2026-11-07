@@ -10,14 +10,10 @@ use object::read::archive::ArchiveFile;
 use object::read::elf::FileHeader;
 use run_make_support::{object, rfs, rustc_minicore};
 
-fn check(cpu: &str, target_feature: Option<&str>, expected: u32) {
-    let rlib = format!("libminicore-{cpu}{}.rlib", target_feature.unwrap_or(""));
-    let mut rustc = rustc_minicore();
-    rustc.target("rx-none-elf").target_cpu(cpu).output(&rlib);
-    if let Some(feature) = target_feature {
-        rustc.arg(format!("-Ctarget-feature={feature}"));
-    }
-    rustc.run();
+fn check(cpu: &str, flags: &[&str], expected: u32) {
+    let name: String = flags.concat().chars().filter(|c| c.is_ascii_alphanumeric()).collect();
+    let rlib = format!("libminicore-{cpu}-{name}.rlib");
+    rustc_minicore().target("rx-none-elf").target_cpu(cpu).args(flags).output(&rlib).run();
 
     let data = rfs::read(&rlib);
     let archive = ArchiveFile::parse(&*data).unwrap();
@@ -54,9 +50,16 @@ fn check(cpu: &str, target_feature: Option<&str>, expected: u32) {
 fn main() {
     // rx-none-elf has `+64bit-doubles` and natural argument alignment (EF_RX_ABI).
     let base = elf::EF_RX_ABI | elf::EF_RX_64BIT_DOUBLES;
-    check("rxv1", None, base);
-    check("rxv2", None, base | elf::EF_RX_V2);
-    check("rxv3", None, base | elf::EF_RX_V3);
-    check("rxv3e", None, base | elf::EF_RX_V3);
-    check("rxv3", Some("-64bit-doubles"), elf::EF_RX_ABI | elf::EF_RX_V3);
+    check("rxv1", &[], base);
+    check("rxv2", &[], base | elf::EF_RX_V2);
+    check("rxv3", &[], base | elf::EF_RX_V3);
+    check("rxv3e", &[], base | elf::EF_RX_V3);
+    check("rxv3", &["-Ctarget-feature=-64bit-doubles"], elf::EF_RX_ABI | elf::EF_RX_V3);
+    check("rxv3", &["-Zllvm-target-feature=-64bit-doubles"], elf::EF_RX_ABI | elf::EF_RX_V3);
+    // `-Z llvm-target-feature` goes to LLVM after `-C target-feature`.
+    check(
+        "rxv3",
+        &["-Ctarget-feature=-64bit-doubles", "-Zllvm-target-feature=+64bit-doubles"],
+        base | elf::EF_RX_V3,
+    );
 }

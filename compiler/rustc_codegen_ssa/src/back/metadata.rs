@@ -413,13 +413,15 @@ pub(super) fn elf_e_flags(architecture: Architecture, sess: &Session) -> u32 {
 
 /// Whether RX `double` is 64 bits. `64bit-doubles` is an LLVM feature that rustc
 /// does not know, so it is not in `internal_target_features`; the last mention
-/// in the target's features and `-C target-feature` decides, as for LLVM.
+/// in the target's features, `-C target-feature` and `-Z llvm-target-feature`
+/// decides, in the order `global_llvm_features` passes them to LLVM.
 fn rx_64bit_doubles(sess: &Session) -> bool {
     sess.target
         .options
         .features
         .split(',')
         .chain(sess.opts.cg.target_feature.split(','))
+        .chain(sess.opts.unstable_opts.llvm_target_feature.split(','))
         .filter_map(|feature| match feature.trim() {
             "+64bit-doubles" => Some(true),
             "-64bit-doubles" => Some(false),
