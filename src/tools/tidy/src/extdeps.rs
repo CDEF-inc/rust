@@ -11,6 +11,8 @@ const ALLOWED_SOURCES: &[&str] = &[
     r#""registry+https://github.com/rust-lang/crates.io-index""#,
     // This is `rust_team_data` used by `site` in src/tools/rustc-perf,
     r#""git+https://github.com/rust-lang/team#db2c1ed9fbc0216e533db954cd249045c01c7406""#,
+    // object with `Architecture::Rx` (the `[patch.crates-io]` in Cargo.toml).
+    r#""git+https://github.com/CDEF-inc/object?rev=90fcc8ef3fa50660e7d2a18f0a7a85f9102d392f#90fcc8ef3fa50660e7d2a18f0a7a85f9102d392f""#,
 ];
 
 /// Checks for external package sources. `root` is the path to the directory that contains the
