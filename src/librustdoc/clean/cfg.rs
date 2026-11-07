@@ -739,6 +739,7 @@ fn human_readable_target_arch(os: Symbol) -> Option<&'static str> {
         PowerPC64 => "PowerPC64",
         RiscV32 => "RISC-V RV32",
         RiscV64 => "RISC-V RV64",
+        Rx => "Renesas RX",
         S390x => "s390x",
         Sparc => "SPARC",
         Sparc64 => "SPARC-64",

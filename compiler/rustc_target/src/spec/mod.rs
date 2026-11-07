@@ -3092,10 +3092,10 @@ impl Target {
             Arch::LoongArch32 => (Architecture::LoongArch32, None),
             Arch::LoongArch64 => (Architecture::LoongArch64, None),
             Arch::CSky => (Architecture::Csky, None),
+            Arch::Rx => (Architecture::Rx, None),
             Arch::Arm64EC => (Architecture::Aarch64, Some(object::SubArchitecture::Arm64EC)),
             Arch::AmdGpu
             | Arch::Nvptx64
-            | Arch::Rx
             | Arch::SpirV
             | Arch::Wasm32
             | Arch::Wasm64

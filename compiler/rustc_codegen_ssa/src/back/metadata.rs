@@ -392,9 +392,41 @@ pub(super) fn elf_e_flags(architecture: Architecture, sess: &Session) -> u32 {
                 _ => bug!("invalid ABI specified for this PPC64 ELF target"),
             }
         }
+        Architecture::Rx => {
+            // This needs to match LLVM `RXELFStreamer.cpp`, except the string
+            // instruction bits (EF_RX_SINSNS_*), which depend on the code.
+            let mut e_flags = elf::EF_RX_ABI;
+            if rx_64bit_doubles(sess) {
+                e_flags |= elf::EF_RX_64BIT_DOUBLES;
+            }
+            if sess.internal_target_features.contains(&sym::rxv3) {
+                e_flags |= elf::EF_RX_V3;
+            } else if sess.internal_target_features.contains(&sym::rxv2) {
+                e_flags |= elf::EF_RX_V2;
+            }
+            e_flags
+        }
         Architecture::Sparc32Plus => elf::EF_SPARC_32PLUS,
         _ => 0,
     }
+}
+
+/// Whether RX `double` is 64 bits. `64bit-doubles` is an LLVM feature that rustc
+/// does not know, so it is not in `internal_target_features`; the last mention
+/// in the target's features and `-C target-feature` decides, as for LLVM.
+fn rx_64bit_doubles(sess: &Session) -> bool {
+    sess.target
+        .options
+        .features
+        .split(',')
+        .chain(sess.opts.cg.target_feature.split(','))
+        .filter_map(|feature| match feature.trim() {
+            "+64bit-doubles" => Some(true),
+            "-64bit-doubles" => Some(false),
+            _ => None,
+        })
+        .last()
+        .unwrap_or(false)
 }
 
 /// Mach-O files contain information about:
