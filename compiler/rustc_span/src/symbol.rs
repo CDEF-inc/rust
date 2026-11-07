@@ -1916,6 +1916,8 @@ symbols! {
         rwpi,
         rx,
         rx_target_feature,
+        rxv2,
+        rxv3,
         s32c1i,
         s390x,
         s390x_target_feature,
