@@ -46,6 +46,11 @@ use minicore::*;
 // arm:             void @c_arg_bool(i1 zeroext %_a)
 // riscv:           void @c_arg_bool(i1 zeroext %_a)
 // rx:                                              void @c_arg_bool(i8 %0)
+//
+// On RX (GCC's rx-elf ABI) a bool argument travels as an i8 that is 0 or 1,
+// because GCC's callee reads the low byte and its callers leave bits 8-31
+// undefined; clang emits `i8 noundef %_a.coerce` for it. rustc passes it as a
+// cast, so the argument has no name.
 #[no_mangle]
 pub extern "C" fn c_arg_bool(_a: bool) {}
 
