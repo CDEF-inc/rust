@@ -1,0 +1,14 @@
+{
+  "llvm-target": "rx-none-elf",
+  "llvm-abiname": "gnu",
+  "data-layout": "e-m:o-p:32:32-i64:32-f64:32-n8:16:32-S32",
+  "arch": "rx",
+  "target-pointer-width": 32,
+  "cpu": "rxv3",
+  "features": "+64bit-doubles",
+  "max-atomic-width": 32,
+  "panic-strategy": "abort",
+  "relocation-model": "static",
+  "linker": "rust-lld",
+  "linker-flavor": "gnu-lld"
+}
