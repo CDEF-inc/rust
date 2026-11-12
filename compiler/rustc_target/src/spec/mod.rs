@@ -1998,6 +1998,9 @@ crate::target_spec_enum! {
         ElfV2 = "elfv2",
         // AArch64
         Pauthtest = "pauthtest",
+        // RX: the calling convention of CC-RX (the default) or GNURX
+        Ccrx = "ccrx",
+        Gnu = "gnu",
 
         Unspecified = "",
     }
