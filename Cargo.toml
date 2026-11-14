@@ -85,5 +85,7 @@ codegen-units = 1
 
 # If you want to use a crate with local modifications, you can set a path or git dependency here.
 # For git dependencies, also add your source to ALLOWED_SOURCES in src/tools/tidy/src/extdeps.rs.
-#[patch.crates-io]
-
+[patch.crates-io]
+# object with `Architecture::Rx` (CDEF-inc/object, from 0.39.1), so that rlib
+# metadata for rx-none-elf is an RX object rather than stored raw.
+object = { git = "https://github.com/CDEF-inc/object", rev = "90fcc8ef3fa50660e7d2a18f0a7a85f9102d392f" }
