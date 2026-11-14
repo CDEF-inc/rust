@@ -25,18 +25,29 @@ support either: it needs the RX port of the same LLVM fork, built with
 which `-C linker=rx-elf-ld` selects instead. Runtime routines that libgcc
 would otherwise provide come from `compiler_builtins`.
 
-The ABI follows GCC for `rx-elf` with `-m64bit-doubles`, so Rust code can call
-and be called by C compiled with GCC or Renesas GNURX:
+The default C ABI is that of Renesas CC-RX. GCC for `rx-elf` with
+`-m64bit-doubles` and Renesas GNURX use the same ABI except for one rule,
+how argument registers are counted (below). Both ABIs share these rules:
 
 * little-endian, 32-bit pointers; `i64` and `f64` are 4-byte aligned;
   `double` is 64 bits;
 * C symbols carry a leading underscore;
-* the first 16 bytes of arguments go in R1-R4, the rest on the stack; the
-  last named argument and all variadic arguments of a variadic function go on
-  the stack;
+* arguments fill R1-R4 by a byte count, each rounded up to 4 bytes; an
+  argument goes in registers only if it fits entirely, otherwise on the
+  stack; the last named argument and all variadic arguments of a variadic
+  function go on the stack;
 * aggregates of 1-16 bytes whose size is a multiple of 4 are returned in
   R1-R4, others through a pointer in R15;
 * R6-R13 are callee-saved, R0 is the stack pointer.
+
+CC-RX counts only the arguments it places in registers, so after an argument
+that went on the stack, a later argument that fits still goes in a free
+register. GCC and GNURX count every argument, so all the arguments after
+that one go on the stack. Calls without such an argument are the same in
+both ABIs. To call, or be called by, C compiled with GCC or GNURX, use a
+custom target: the JSON of `rx-none-elf` (`rustc -Z unstable-options
+--print target-spec-json --target rx-none-elf`) with `"llvm-abiname":
+"gnu"`. clang selects the same ABI with `-mabi=gnu`.
 
 Floating point uses soft-float routines (`compiler_builtins`, fully IEEE)
 by default. With `-C target-feature=+flush-denormals` (unstable
