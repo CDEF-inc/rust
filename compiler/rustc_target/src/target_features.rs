@@ -1026,17 +1026,17 @@ static AVR_FEATURES: &[(&str, Stability, ImpliedFeatures)] = &[
 
 static RX_FEATURES: &[(&str, Stability, ImpliedFeatures)] = &[
     // tidy-alphabetical-start
-    ("dfpu", Unstable(sym::rx_target_feature), &[]),
+    ("dfpu", Stable, &[]),
     // Denormals may be flushed to zero, as the FPU / DFPU do (FPSW.DN = 1):
     // float and double arithmetic, compares and conversions then use them.
-    ("flush-denormals", Unstable(sym::rx_target_feature), &[]),
-    ("fpu", Unstable(sym::rx_target_feature), &[]),
+    ("flush-denormals", Stable, &[]),
+    ("fpu", Stable, &[]),
     // Linker relaxation hints (as GNU as -relax): lld shortens calls and
     // symbol addresses.
-    ("relax", Unstable(sym::rx_target_feature), &[]),
-    ("rxv2", Unstable(sym::rx_target_feature), &[]),
-    ("rxv3", Unstable(sym::rx_target_feature), &["rxv2"]),
-    ("rxv3e", Unstable(sym::rx_target_feature), &["rxv3"]),
+    ("relax", Stable, &[]),
+    ("rxv2", Stable, &[]),
+    ("rxv3", Stable, &["rxv2"]),
+    ("rxv3e", Stable, &["rxv3"]),
     // tidy-alphabetical-end
 ];
 

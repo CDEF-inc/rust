@@ -403,6 +403,8 @@ declare_features! (
     (accepted, return_position_impl_trait_in_trait, "1.75.0", Some(91611)),
     /// Allows code like `let x: &'static u32 = &42` to work (RFC 1414).
     (accepted, rvalue_static_promotion, "1.21.0", Some(38865)),
+    /// Target features on Renesas RX (CDEF-inc fork: stable here).
+    (accepted, rx_target_feature, "1.100.0", None),
     /// Allows use of the `vector` and related s390x target features.
     (accepted, s390x_target_feature_vector, "1.93.0", Some(145649)),
     /// Allows `Self` in type definitions (RFC 2300).
