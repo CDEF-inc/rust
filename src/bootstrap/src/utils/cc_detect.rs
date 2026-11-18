@@ -29,6 +29,15 @@ use crate::core::config::flags::Subcommand;
 use crate::core::config::{CompressDebuginfo, TargetSelection};
 use crate::core::session::{CLang, Session};
 use crate::utils::exec::{BootstrapCommand, command};
+/// The target to describe to cc-rs. CDEF-inc fork: cc-rs does not know the
+/// RX architecture and stops on `rx-none-elf`. No C code is built for it
+/// (compiler_builtins is Rust-only there: `optimized-compiler-builtins =
+/// false`), so a bare-metal target cc-rs knows stands in; the C compiler and
+/// archiver are the ones `bootstrap.toml` sets for `rx-none-elf`.
+fn cc_rs_target(triple: &str) -> &str {
+    if triple == "rx-none-elf" { "msp430-none-elf" } else { triple }
+}
+
 /// Creates and configures a new [`cc::Build`] instance for the given target.
 fn new_cc_build(sess: &Session, target: TargetSelection) -> cc::Build {
     let mut cfg = cc::Build::new();
@@ -38,7 +47,7 @@ fn new_cc_build(sess: &Session, target: TargetSelection) -> cc::Build {
         .debug(false)
         // We have to configure out_dir, otherwise flag_if_supported will not work
         .out_dir(sess.tempdir().join("cc-rs-out-dir"))
-        .target(&target.triple)
+        .target(cc_rs_target(&target.triple))
         .host(&sess.host_target.triple);
 
     match sess.config.compress_debuginfo(target) {

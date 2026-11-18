@@ -1280,12 +1280,16 @@ pub(super) fn emit_va_arg<'ll, 'tcx>(
         Arch::Bpf => bug!("bpf does not support c-variadic functions"),
         Arch::SpirV => bug!("spirv does not support c-variadic functions"),
 
-        Arch::Avr | Arch::M68k | Arch::Msp430 | Arch::Rx => {
+        Arch::Avr | Arch::M68k | Arch::Msp430 => {
             std::assert_matches!(stability, CVariadicStatus::Unstable { .. });
 
             // Clang uses the LLVM implementation for these architectures.
             bx.va_arg(addr.immediate(), layout.llvm_type(bx.cx))
         }
+
+        // CDEF-inc fork: c-variadic definitions are stable on RX, still with
+        // LLVM's `va_arg`, which clang uses too.
+        Arch::Rx => bx.va_arg(addr.immediate(), layout.llvm_type(bx.cx)),
 
         Arch::Other(ref arch) => {
             std::assert_matches!(stability, CVariadicStatus::Unstable { .. });

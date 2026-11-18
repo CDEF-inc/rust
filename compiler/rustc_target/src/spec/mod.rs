@@ -2123,9 +2123,13 @@ impl Target {
             // - Check that calling c-variadic functions defined in Rust can be called from C.
             // For most targets `tests/run-make/c-link-to-rust-va-list-fn` can be used here.
             // For no_std targets a manual setup may be needed.
-            Sparc | Avr | M68k | Msp430 | Rx => {
+            Sparc | Avr | M68k | Msp430 => {
                 CVariadicStatus::Unstable { feature: sym::c_variadic_experimental_arch }
             }
+
+            // CDEF-inc fork: stable on RX. `va_arg` is LLVM's, as with clang;
+            // rx-rust's variadic-smoke checks it against GCC both ways.
+            Rx => CVariadicStatus::Stable,
 
             AArch64 | AmdGpu | Arm | Arm64EC | CSky | Hexagon | LoongArch32 | LoongArch64
             | Mips | Mips32r6 | Mips64 | Mips64r6 | Nvptx64 | PowerPC | PowerPC64 | RiscV32

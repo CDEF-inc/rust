@@ -50,8 +50,7 @@ custom target: the JSON of `rx-none-elf` (`rustc -Z unstable-options
 "gnu"`. clang selects the same ABI with `-mabi=gnu`.
 
 Floating point uses soft-float routines (`compiler_builtins`, fully IEEE)
-by default. With `-C target-feature=+flush-denormals` (unstable
-`rx_target_feature`), `f32` arithmetic, compares and `as` conversions use
+by default. With `-C target-feature=+flush-denormals`, `f32` arithmetic, compares and `as` conversions use
 the FPU, and on `rxv3` / `rxv3e` `f64` uses the double-precision FPU (DFPU).
 The results are IEEE for NaNs, infinities, signed zeros and rounding; only
 denormal inputs and results become zero (FPSW.DN / DPSW.DDN, which the
@@ -80,22 +79,39 @@ target = ["x86_64-unknown-linux-gnu", "rx-none-elf"]
 
 [target.x86_64-unknown-linux-gnu]
 llvm-config = "/path/to/llvm/bin/llvm-config"
+
+[target.rx-none-elf]
+# Build core for the RXv1 baseline, so that it runs on every RX core.
+rustflags = ["-Ctarget-cpu=rxv1"]
+optimized-compiler-builtins = false
 ```
 
+bootstrap then builds `core`, `alloc` and `compiler_builtins` (with its
+`mem` feature, which provides `memcpy` and friends) for the target.
 Alternatively build only the compiler and use `-Zbuild-std`.
 
 ## Building Rust programs
 
-Rust does not ship pre-compiled artifacts for this target. Use
-`-Zbuild-std`, for example in `.cargo/config.toml`:
+Rust does not ship pre-compiled artifacts for this target. The CDEF-inc
+toolchain (rx-rust) does: its sysroot has `core`, `alloc` and
+`compiler_builtins` for `rx-none-elf`, built for `rxv1` so that they run on
+every RX core. With it, a plain build works on this stable compiler, for
+example with this `.cargo/config.toml`:
 
 ```toml
 [build]
 target = "rx-none-elf"
 
 [target.rx-none-elf]
-rustflags = ["-C", "link-arg=-Tlink.x"]
+rustflags = ["-C", "link-arg=-Tlink.x", "-C", "target-cpu=rxv3"]
+```
 
+The crate's own code is then compiled for the selected CPU; only the
+pre-compiled library code is RXv1 code. To compile `core` for the selected
+CPU too, use `-Zbuild-std` (unstable: it needs a nightly compiler, or
+`RUSTC_BOOTSTRAP=1` with this one):
+
+```toml
 [unstable]
 build-std = ["core"]
 build-std-features = ["compiler-builtins-mem"]
@@ -104,7 +120,7 @@ build-std-features = ["compiler-builtins-mem"]
 The linker script and startup code (setting up the stack and `INTB`,
 initialising `.data` and `.bss`, the vector tables) are not provided by rustc.
 
-Inline assembly is supported with `#![feature(asm_experimental_arch)]`: the
+Inline assembly (`asm!`, `global_asm!`) is stable on this fork: the
 `reg` class covers R1-R15, and `clobber_abi("C")` clobbers R1-R5, R14 and R15.
 
 ## Testing

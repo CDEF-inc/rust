@@ -9,7 +9,7 @@
 // emits the hints. It is off by default.
 
 #![crate_type = "lib"]
-#![feature(no_core, rx_target_feature)]
+#![feature(no_core)]
 #![no_core]
 
 extern crate minicore;

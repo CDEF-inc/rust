@@ -51,6 +51,8 @@ impl<'hir> LoweringContext<'_, 'hir> {
                     | asm::InlineAsmArch::S390x
                     | asm::InlineAsmArch::PowerPC
                     | asm::InlineAsmArch::PowerPC64
+                    // CDEF-inc fork: RX inline assembly is stable here.
+                    | asm::InlineAsmArch::Rx
             );
             if !is_stable
                 && !self.tcx.features().asm_experimental_arch()

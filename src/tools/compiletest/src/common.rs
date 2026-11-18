@@ -875,6 +875,8 @@ impl Config {
             "loongarch32",
             "loongarch64",
             "s390x",
+            // CDEF-inc fork: stable on RX.
+            "rx",
             // These targets require an additional asm_experimental_arch feature.
             // "nvptx64", "hexagon", "mips", "mips64", "spirv", "wasm32",
         ];
